@@ -101,7 +101,7 @@ _install() {
           echo "$configdiff">text_box
           sed -i -e "s/^</installed </g" text_box
           sed -i -e "s/^>/package >/g" text_box
-          TERM=ansi whiptail --title "zramit" --textbox text_box 14 78
+          TERM=ansi whiptail --title "zramit" --scrolltext --textbox text_box 14 78
           rm text_box
         fi
         if (TERM=ansi whiptail --title "zramit" --yesno "Installed configuration differs from packaged version\n\n install packaged config?" 14 58);then
@@ -173,7 +173,7 @@ _install() {
 
   if ! [ -z $iswhiptail ];then
     echo "zram service installed successfully!\n\n$zramdetail">text_box
-    TERM=ansi whiptail --clear --title "zramit" --textbox text_box 14 78
+    TERM=ansi whiptail --clear --title "zramit" --scrolltext --textbox text_box 14 78
     rm text_box
   else
     echo
