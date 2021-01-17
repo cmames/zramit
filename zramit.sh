@@ -21,23 +21,23 @@ threads=$(LC_ALL=C lscpu| grep "^CPU(s):"|awk '{print $2}')
 # set sane defaults, see /etc/default/zramit for explanations
 _zram_fraction="1/2"
 _zram_algorithm="lz4"
-_comp_factor=''
+_zram_compfactor=''
 _zram_fixedsize=''
 _zram_streams="$threads"
 _zram_number=''
 _zram_priority='20'
 
 # load user config
-[ -f /etc/default/zramit ] &&
-  . /etc/default/zramit
+[ -f /etc/default/zramit.conf ] &&
+  . /etc/default/zramit.conf
 
 # set expected compression ratio based on algorithm; this is a rough estimate
 # skip if already set in user config
-if [ -z "$_comp_factor" ]; then
+if [ -z "$_zram_compfactor" ]; then
   case $_zram_algorithm in
-    lzo* | zstd) _comp_factor="3" ;;
-    lz4) _comp_factor="2.5" ;;
-    *) _comp_factor="2" ;;
+    lzo* | zstd) _zram_compfactor="3" ;;
+    lz4) _zram_compfactor="2.5" ;;
+    *) _zram_compfactor="2" ;;
   esac
 fi
 
@@ -86,8 +86,7 @@ _init() {
   else
     # Calculate memory to use for zram
     totalmem=$(LC_ALL=C free | grep -e "^Mem:" | sed -e 's/^Mem: *//' -e 's/  *.*//')
-   _comp_factor=1
-    mem=$(calc "$totalmem * $_comp_factor * $_zram_fraction * 1024 / $_zram_number")
+    mem=$(calc "$totalmem * $_zram_compfactor * $_zram_fraction * 1024 / $_zram_number")
   fi
 
   if [ $mem -lt 40960 ]; then
@@ -137,7 +136,7 @@ _rem_zdev() {
     return 1
   fi
   for i in $(seq 3); do
-    sleep $(calc "2  * $i")  
+    sleep $(calc "2  * $i")
     zramctl -r "$1" || true
     [ -b "$1" ] || break
   done

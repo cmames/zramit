@@ -16,6 +16,18 @@ cd zramit
 sudo ./install.sh
 ```
 
+### configure
+
+by editing
+```
+/etc/default/zramit.conf
+```
+
+or with the configure assistant
+```
+sudo ./install.sh --config
+```
+
 ### Usage
 
 zramit.service will be started automatically after installation and during
