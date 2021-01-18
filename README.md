@@ -28,6 +28,10 @@ or with the configure assistant
 sudo ./install.sh --config
 ```
 
+### Hibernate
+
+zramit assure end of zram swap before entering hibernate, and assure start at resume from hibernate. On resume it move pages from swapfile into zram swap
+
 ### Usage
 
 zramit.service will be started automatically after installation and during
