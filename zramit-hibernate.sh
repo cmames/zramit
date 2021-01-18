@@ -13,5 +13,5 @@ elif [ "${1}" = "post" ]
  then
   # Do the thing you want after resume here, e.g.:
   /usr/local/sbin/zramit.sh init
-  echo "swapoff -v /swapfile && swapon -v /swapfile &" | at now + 2 minutes
+  echo "nice -19 swapoff -v /swapfile && swapon -v /swapfile &" | at now + 2 minutes
 fi
