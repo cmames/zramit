@@ -13,5 +13,6 @@ elif [ "${1}" = "post" ]
  then
   # Do the thing you want after resume here, e.g.:
   /usr/local/sbin/zramit.sh init
-  echo "nice -19 swapoff -v /swapfile && swapon -v /swapfile &" | at now + 2 minutes
+  swapfiles=$(cat /proc/swaps |grep -v "zram" |grep "file" |awk '{print $1}' |sed -e ':a;N;$!ba;s/\n/ /g')
+  echo "nice -19 swapoff -v $swapfiles && swapon -v $swapfiles &" | at now + 3 minutes
 fi
