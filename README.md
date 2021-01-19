@@ -18,23 +18,28 @@ sudo ./install.sh
 
 ### configure
 
-by editing
+By editing
 ```
 /etc/default/zramit.conf
 ```
 
-or with the configure assistant
+Or with the configure assistant
 ```
 sudo ./install.sh --config
 ```
 
-### Hibernate
+### Hibernate, Hybrid-sleep, Suspend
 
-zramit assure end of zram swap before entering hibernate, and assure start at resume from hibernate. On resume it move pages from swapfile into zram swap
+Zramit assure end of zram swap before entering hibernate, and assure start at
+resume from hibernate. On resume it move pages from swapfile into zram swap.
+
+Hybrid-sleep is like hibernate to take care in case of power failure.
+
+On suspend, zramit do nothing.
 
 ### Usage
 
-zramit.service will be started automatically after installation and during
+Zramit.service will be started automatically after installation and during
 each subsequent boot. The default allocation creates a zram device that should
 use around half of physical memory when completely full.
 
