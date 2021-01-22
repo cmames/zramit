@@ -19,5 +19,5 @@ elif [ "$1" = "post" ]
     /usr/local/sbin/zramit.sh init
   fi
   swapfiles=$(cat /proc/swaps |grep -v "zram" |grep "file" |awk '{print $1}' |sed -e ':a;N;$!ba;s/\n/ /g')
-  echo "nice -19 swapoff -v $swapfiles && swapon -v $swapfiles &" | at now + 3 minutes
+  echo "nice -19 swapoff -v $swapfiles && swapon -d -v $swapfiles &" | at now + 3 minutes
 fi

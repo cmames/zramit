@@ -1,5 +1,5 @@
 # zramit
-Zram swap and more for linux
+Zram swap with hibernate
 
 ### Why?
 
@@ -13,10 +13,10 @@ reliable, modern and easy to configure.
 ```
 git clone https://github.com/cmames/zramit.git
 cd zramit
-sudo ./install.sh
+./zramit.sh --install
 ```
 
-### configure
+### Configure
 
 By editing
 ```
@@ -25,7 +25,18 @@ By editing
 
 Or with the configure assistant
 ```
-sudo ./install.sh --config
+zramit --config
+```
+### Status
+
+display status with
+```
+zramit --status
+```
+
+or dynamic status (auto refresh every second) with
+```
+zramit --dstatus
 ```
 
 ### Hibernate, Hybrid-sleep, Suspend
@@ -51,9 +62,11 @@ kernels the best overall choice is probably lzo-rle.
 
 Edit `/etc/default/zramit.conf` if you'd like to change compression algorithms
 or swap allocation and then restart zramit with
-`systemctl restart zramit.service`.
+`systemctl restart zramit.service`
+or
+`zramit --restart`
 
-Run `zramctl` during use to monitor swap compression and real memory usage.
+Run `zramctl` during use to monitor swap compression and real memory usage or run `zramit --status`
 
 ### Compatibility
 
