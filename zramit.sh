@@ -380,7 +380,7 @@ _dstatus() {
   tput sc
   while true;do
     _status
-    echo "$WH press x to exit$NC"
+    echo "${WH}press x to exit${NC}"
     input=$(head -c1)
     if [ "$input" = "x" ] || [ "$input" = "X" ]; then
       stty "$old_tty_settings"
