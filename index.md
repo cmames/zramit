@@ -1,12 +1,14 @@
 # zramit
-Zram swap with hibernate
+Zram swap with hibernate for linux system
+https://github.com/cmames/zramit
 
 ### Why?
 
 There are dozens of zram swap scripts out there, but most of them are overly
 complicated and do things that haven't been neccessary since linux 3.X or have
-massive logic errors in their swap size calculations. This script is simple and
-reliable, modern and easy to configure.
+massive logic errors in their swap size calculations.
+Other zram swap scripts don't take care of hibernate or hybrid-sleep and don't
+take care of running out of RAM. Zramit do!
 
 ### Installation
 
