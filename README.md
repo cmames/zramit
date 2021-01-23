@@ -11,11 +11,17 @@ take care of running out of RAM. Zramit do!
 
 ### Installation
 
+Download and unzip the zip or tar.gz from lastest release
+or
 ```
 git clone https://github.com/cmames/zramit.git
+```
+and
+```
 cd zramit
 ./zramit.sh --install
 ```
+You can delete the zramit directory after install
 
 ### Configure
 
