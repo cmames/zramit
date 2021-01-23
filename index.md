@@ -1,6 +1,6 @@
 # zramit
 Zram swap with hibernate for linux system
-https://github.com/cmames/zramit
+<a href="https://github.com/cmames/zramit">https://github.com/cmames/zramit</a>
 
 ### Why?
 
