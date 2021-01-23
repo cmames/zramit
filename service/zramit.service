@@ -6,8 +6,8 @@ Before=shutdown.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/local/sbin/zramit-script.sh init
-ExecStop=/usr/local/sbin/zramit-script.sh end
+ExecStart=/usr/local/sbin/zramit-script.sh start
+ExecStop=/usr/local/sbin/zramit-script.sh stop
 RemainAfterExit=True
 
 [Install]
