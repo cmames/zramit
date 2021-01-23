@@ -27,6 +27,7 @@ and install
 ```
 ./zramit.sh --install
 ```
+You can delete the zramit directory after install.
 
 ### Configure
 
