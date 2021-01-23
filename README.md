@@ -1,5 +1,5 @@
 # zramit
-Zram swap with hibernate
+Zram swap with hibernate for linux system
 
 ### Why?
 
