@@ -13,14 +13,18 @@ take care of running out of RAM. Zramit do!
 
 ### Installation
 
-download <a href="https://github.com/cmames/zramit/archive/main.zip">ZIP</a>
+download <a href="https://github.com/cmames/zramit/archive/V2.0.zip">zip</a> or 
+<a herf="https://github.com/cmames/zramit/archive/V2.0.tar.gz">tar.gz</a><br>
 or
 ```
 git clone https://github.com/cmames/zramit.git
 ```
-
+go in the directory created
 ```
 cd zramit
+```
+and install
+```
 ./zramit.sh --install
 ```
 
