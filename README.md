@@ -9,6 +9,7 @@ massive logic errors in their swap size calculations.
 Other zram swap scripts don't take care of hibernate or hybrid-sleep and don't
 take care of running out of RAM. Zramit do!
 
+---
 ### Installation
 
 Download and unzip the zip or tar.gz from lastest release
@@ -23,6 +24,7 @@ cd zramit
 ```
 You can delete the zramit directory after install.
 
+---
 ### Configure
 
 By editing
@@ -34,6 +36,7 @@ Or with the configure assistant
 ```
 zramit --config
 ```
+---
 ### Status
 
 display status with
@@ -46,6 +49,7 @@ or dynamic status (auto refresh every second) with
 zramit --dstatus
 ```
 
+---
 ### Hibernate, Hybrid-sleep, Suspend
 
 Zramit assure end of zram swap before entering hibernate, and assure start at
@@ -55,6 +59,7 @@ Hybrid-sleep is like hibernate to take care in case of power failure.
 
 On suspend, zramit do nothing.
 
+---
 ### Usage
 
 Zramit.service will be started automatically after installation and during
@@ -75,6 +80,7 @@ or
 
 Run `zramctl` during use to monitor swap compression and real memory usage or run `zramit --status`
 
+---
 ### Compatibility
 
 This should run on pretty much any recent (4.0+? kernel) Linux system using
