@@ -13,8 +13,13 @@ take care of running out of RAM. Zramit do!
 
 ### Installation
 
+download <a href="https://github.com/cmames/zramit/archive/main.zip">ZIP</a>
+or
 ```
 git clone https://github.com/cmames/zramit.git
+```
+
+```
 cd zramit
 ./zramit.sh --install
 ```
