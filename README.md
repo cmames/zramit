@@ -3,6 +3,8 @@
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/cmames/zramit?style=plastic)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/cmames/zramit?style=plastic)
 ![GitHub last commit](https://img.shields.io/github/last-commit/cmames/zramit?style=plastic)
+![Code Grade](https://www.code-inspector.com/project/18173/score/svg)
+[![Code Grade](https://www.code-inspector.com/project/18173/status/svg)](https://www.code-inspector.com/public/project/18173/zramit/dashboard)
 
 Zram swap with hibernate for linux system
 
