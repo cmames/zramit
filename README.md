@@ -1,4 +1,9 @@
 # zramit
+[![GitHub license](https://img.shields.io/github/license/cmames/zramit?style=plastic)](https://github.com/cmames/zramit/blob/main/LICENSE)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/cmames/zramit?style=plastic)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/cmames/zramit?style=plastic)
+![GitHub last commit](https://img.shields.io/github/last-commit/cmames/zramit?style=plastic)
+
 Zram swap with hibernate for linux system
 
 ---
