@@ -83,6 +83,7 @@ or
 `zramit --restart`
 
 Run `zramctl` to monitor swap compression and real memory usage or run
+
 `zramit --status`
 
 ---
