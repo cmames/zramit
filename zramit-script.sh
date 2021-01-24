@@ -21,7 +21,7 @@ _zramit_algorithm="lz4"
 _zramit_compfactor=""
 _zramit_fixedsize=""
 _zramit_streams="$threads"
-_zramit_number="$(($corespersocket*$sockets))"
+_zramit_number=$((corespersocket*sockets))
 _zramit_priority="20"
 
 # load user config
@@ -91,14 +91,14 @@ _init() {
   _device=''
   for nbz in $(seq "$_zramit_number"); do
     for i in $(seq 3); do
-      sleep $(($i-1))
+      sleep $((i-1))
       echo "zramctl -f -s $mem -a $_zramit_algorithm -t $_zramit_streams"
       _device=$(zramctl -f -s "$mem" -a "$_zramit_algorithm" -t "$_zramit_streams") || true
       [ -b "$_device" ] && break 1
     done
     _limit=$(echo "$mem/$_zramit_compfactor" |bc)
     _dev=$(echo "$_device" | awk -F/ '{print $3}')
-    echo $_limit > /sys/block/$_dev/mem_limit
+    echo "$_limit" > /sys/block/$_dev/mem_limit
 
     if [ -b "$_device" ]; then
       # cleanup the device if swap setup fails
@@ -134,7 +134,7 @@ _rem_zdev() {
     return 1
   fi
   for i in $(seq 5); do
-    sleep $(($i-1))
+    sleep $((i-1))
     zramctl -r "$1" || true
     [ -b "$1" ] || break
   done
