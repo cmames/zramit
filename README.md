@@ -75,8 +75,11 @@ kernels the best overall choice is probably lzo-rle.
 
 Edit `/etc/default/zramit.conf` if you'd like to change compression algorithms
 or swap allocation and then restart zramit with
+
 `systemctl restart zramit.service`
+
 or
+
 `zramit --restart`
 
 Run `zramctl` during use to monitor swap compression and real memory usage or run `zramit --status`
