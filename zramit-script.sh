@@ -1,7 +1,4 @@
 #!/bin/sh
-# source: https://github.com/foundObjects/zramit
-[ "$(id -u)" -eq '0' ] || { echo "This script requires root." && exit 1; }
-case "$(readlink /proc/$$/exe)" in */bash) set -euo pipefail ;; *) set -eu ;; esac
 
 # make sure our environment is predictable
 export PATH=/usr/sbin:/usr/bin:/sbin:/bin
@@ -86,7 +83,7 @@ _init() {
     mem=$(echo "$totalmem*1024*$_zramit_compfactor*$_zramit_fraction/$_zramit_number" |bc)
   fi
 
-  if [ $mem -lt 40960 ]; then
+  if [ "$mem" -lt 40960 ]; then
     mem=40960
   fi
   # NOTE: init is a little janky; zramctl sometimes fails if we don't wait after module
@@ -100,14 +97,14 @@ _init() {
       [ -b "$_device" ] && break 1
     done
     _limit=$(echo "$mem/$_zramit_compfactor" |bc)
-    _dev=$(echo $_device | awk -F/ '{print $3}')
+    _dev=$(echo "$_device" | awk -F/ '{print $3}')
     echo $_limit > /sys/block/$_dev/mem_limit
 
     if [ -b "$_device" ]; then
       # cleanup the device if swap setup fails
       trap "_rem_zdev $_device" EXIT
       mkswap "$_device"
-      swapon -d -p $_zramit_priority "$_device"
+      swapon -d -p "$_zramit_priority" "$_device"
       trap - EXIT
     else
       err "init: Failed to initialize zram device"
