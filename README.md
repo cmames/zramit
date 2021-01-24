@@ -1,4 +1,5 @@
 # zramit
+image:https://img.shields.io/github/license/cmames/zramit?style=plastic["GitHub license",link="https://github.com/cmames/zramit/blob/main/LICENSE"]
 Zram swap with hibernate for linux system
 
 ---
