@@ -82,7 +82,8 @@ or
 
 `zramit --restart`
 
-Run `zramctl` during use to monitor swap compression and real memory usage or run `zramit --status`
+Run `zramctl` to monitor swap compression and real memory usage or run
+`zramit --status`
 
 ---
 ### Compatibility
