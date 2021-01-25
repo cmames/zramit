@@ -4,7 +4,7 @@
 export PATH=/usr/sbin:/usr/bin:/sbin:/bin
 \unalias -a
 
-for _require in 'sed' 'grep' 'awk' 'column' 'bc' 'lscpu' 'modprobe' 'sleep' 'mkswap' 'swapon' 'swapoff' 'zramctl' 'systemctl' 'install' 'sync'
+for _require in 'sed' 'grep' 'awk' 'column' 'bc' 'lscpu' 'modprobe' 'sleep' 'mkswap' 'swapon' 'swapoff' 'zramctl' 'systemctl' 'install'
 do
   [ -n "$(command -v $_require)" ]  || {
     echo "This script requires $_require"
@@ -112,7 +112,7 @@ _install() {
       set +e
       grep "_zram" /etc/default/zramit.conf > oldconf
       grep "_zram" service/zramit.config > newconf
-      configdiff=$(diff -u --suppress-common-line oldconf newconf | grep "^[-+]" | sed -e "s/oldconf.*/installed config/g" -e "s/newconf.*/package config/g" -e "s/^-\([^-]\)/--- \1/g" -e "s/^+\([^+]\)/+++ \1/g")
+      configdiff=$(diff -u --suppress-common-line oldconf newconf | grep "^[-+]" | sed -e 's/oldconf.*/installed config/g' -e 's/newconf.*/package config/g' -e 's/^-\([^-]\)/--- \1/g' -e 's/^+\([^+]\)/+++ \1/g')
       rm oldconf
       rm newconf
       set -e
@@ -125,7 +125,6 @@ _install() {
           echo "$configdiff">text_box
           sed -i -e "s/^</installed </g" text_box
           sed -i -e "s/^>/package >/g" text_box
-          sync
           TERM=ansi whiptail --title "zramit" --scrolltext --textbox text_box 14 78
           rm text_box
         fi
@@ -197,7 +196,6 @@ _install() {
   if $iswhiptail;then
     echo "zram service installed successfully!" >text_box
     echo "$zramdetail" >>text_box
-    sync
     TERM=ansi whiptail --clear --title "zramit" --scrolltext --textbox text_box 14 78
     rm text_box
   else
@@ -290,7 +288,6 @@ _restart() {
   if $iswhiptail;then
     echo "zram service restarted successfully!" >text_box
     echo "$zramdetail" >>text_box
-    sync
     TERM=ansi whiptail --clear --title "zramit" --scrolltext --textbox text_box 14 78
     rm text_box
   else
