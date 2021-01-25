@@ -112,7 +112,7 @@ _install() {
       set +e
       grep "_zram" /etc/default/zramit.conf > oldconf
       grep "_zram" service/zramit.config > newconf
-      configdiff=$(diff -u --suppress-common-line oldconf newconf | grep "^[-+]" | sed -e 's/oldconf.*/installed config/g' -e 's/newconf.*/package config/g' -e 's/^-\([^-]\)/--- \1/g' -e 's/^+\([^+]\)/+++ \1/g')
+      configdiff=$(diff -u --suppress-common-line oldconf newconf | grep "^[-+]" | sed -e 's/oldconf.*/installed config/g' -e 's/newconf.*/package config/g')
       rm oldconf
       rm newconf
       set -e
