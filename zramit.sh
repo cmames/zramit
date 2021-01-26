@@ -4,6 +4,7 @@
 export PATH=/usr/sbin:/usr/bin:/sbin:/bin
 \unalias -a
 
+# check if utils are installed
 for _require in 'sed' 'grep' 'awk' 'column' 'bc' 'lscpu' 'modprobe' 'sleep' 'mkswap' 'swapon' 'swapoff' 'zramctl' 'systemctl' 'install'
 do
   [ -n "$(command -v $_require)" ]  || {
@@ -13,13 +14,14 @@ do
   }
 done
 
+# set iswhiptail if whiptail is installed
 if [ -z "$(command -v whiptail)" ];then
   iswhiptail=false
 else
   iswhiptail=true
 fi
 
-# installer main body:
+# main body:
 _main() {
   # ensure $1 exists so 'set -u' doesn't error out
   { [ "$#" -eq "0" ] && set -- ""; } > /dev/null 2>&1
@@ -50,7 +52,7 @@ _main() {
       _status
       ;;
     "--dstatus")
-      # status
+      # dynamic status
       _dstatus
       ;;
     *)
@@ -61,6 +63,7 @@ _main() {
   exit 0
 }
 
+# install function
 _install() {
   if $iswhiptail ;then
     TERM=ansi whiptail --title "zramit" --infobox 'Prepare install\n\nplease wait ...' 14 58
@@ -69,15 +72,12 @@ _install() {
   configdiff=''
   if systemctl -q is-active zramit.service; then
     if $iswhiptail;then
-      sleep 1
       TERM=ansi whiptail --title "zramit" --infobox 'Stopping zramit service' 14 58
     else echo "Stopping zramit service"
     fi
     sudo systemctl stop zramit.service
   fi
-
   if $iswhiptail;then
-    sleep 1
     TERM=ansi whiptail --title "zramit" --infobox 'Installing script and service...\n  [-] installing script\n  [ ] installing hibernate script\n  [ ] installing service\n  [ ] installing config file' 14 58
   else
       echo "Installing script and service ..."
@@ -85,28 +85,23 @@ _install() {
   fi
   sudo install -o root zramit-script.sh /usr/local/sbin/zramit-script.sh
   sudo install -o root zramit.sh /usr/local/sbin/zramit
-
   if $iswhiptail;then
-    sleep 1
     TERM=ansi whiptail --title "zramit" --infobox 'Installing script and service...\n  [X] installing script\n  [-] installing hibernate script\n  [ ] installing service\n  [ ] installing config file' 14 58
   else
     echo "  ├ installing hibernate script"
   fi
   sudo install -o root zramit-hibernate.sh /lib/systemd/system-sleep/zramit-hibernate.sh
   if $iswhiptail;then
-    sleep 1
     TERM=ansi whiptail --title "zramit" --infobox 'Installing script and service...\n  [X] installing script\n  [X] installing hibernate script\n  [-] installing service\n  [ ] installing config file' 14 58
   else
     echo "  ├ installing service"
   fi
   sudo install -o root -m 0644 service/zramit.service /etc/systemd/system/zramit.service
   if $iswhiptail;then
-    sleep 1
     TERM=ansi whiptail --title "zramit" --infobox 'Installing script and service...\n  [X] installing script\n  [X] installing hibernate script\n  [X] installing service\n  [-] installing config file' 14 58
   else
     echo "  └ installing config file"
   fi
-
   if [ -f /etc/default/zramit.conf ]; then
     {
       set +e
@@ -120,7 +115,6 @@ _install() {
     if [ -n "$configdiff" ]; then
       yn=''
       if $iswhiptail;then
-        sleep 1
         if (TERM=ansi whiptail --title "zramit" --yesno 'Installed configuration differs from packaged version\n\n would you want to see differences?' 14 58);then
           echo "$configdiff">text_box
           sed -i -e "s/^</installed </g" text_box
@@ -171,28 +165,23 @@ _install() {
     fi
   fi
   if $iswhiptail;then
-    sleep 1
     TERM=ansi whiptail --title "zramit" --infobox 'Installing script and service...\n  [X] installing script\n  [X] installing hibernate script\n  [X] installing service\n  [X] installing config file' 14 58
+    sleep 1 # wait to let user read :)
   fi
-
   if $iswhiptail;then
-    sleep 1
     TERM=ansi whiptail --title "zramit" --infobox 'Reloading systemd unit files and enabling boot-time service ...' 14 58
   else
     echo "Reloading systemd unit files and enabling boot-time service ..."
   fi
   sudo systemctl daemon-reload
   sudo systemctl enable zramit.service
-
   if $iswhiptail;then
     TERM=ansi whiptail --title "zramit" --infobox 'Starting zram  service ...' 14 58
   else
     echo "Starting zramit service ..."
   fi
   sudo systemctl start zramit.service
-  sleep 1
   zramdetail=$(zramctl)
-
   if $iswhiptail;then
     echo "zram service installed successfully!" >text_box
     echo "$zramdetail" >>text_box
@@ -206,6 +195,7 @@ _install() {
   fi
 }
 
+# uninstall function
 _uninstall() {
   if $iswhiptail;then
     TERM=ansi whiptail --title "zramit" --infobox 'Stopping zramit service' 14 58
@@ -214,9 +204,7 @@ _uninstall() {
   if systemctl -q is-active zramit.service; then
     sudo systemctl stop zramit.service
   fi
-
   if $iswhiptail;then
-    sleep 1
     TERM=ansi whiptail --title "zramit" --infobox 'Uninstalling script and service...\n  [-] remove script\n  [ ] remove hibernate script\n  [ ] remove service\n  [ ] remove config file' 14 58
   else
       echo "Unnstalling script and service ..."
@@ -229,7 +217,6 @@ _uninstall() {
     sudo rm -f /usr/local/sbin/zramit
   fi
   if $iswhiptail;then
-    sleep 1
     TERM=ansi whiptail --title "zramit" --infobox 'Uninstalling script and service...\n  [X] remove script\n  [-] remove hibernate script\n  [ ] remove service\n  [ ] remove config file' 14 58
   else
     echo "  ├ remove hibernate script"
@@ -238,7 +225,6 @@ _uninstall() {
     sudo rm -f /lib/systemd/system-sleep/zramit-hibernate.sh
   fi
   if $iswhiptail;then
-    sleep 1
     TERM=ansi whiptail --title "zramit" --infobox 'Uninstalling script and service...\n  [X] remove script\n  [X] remove hibernate script\n  [-] remove service\n  [ ] remove config file' 14 58
   else
     echo "  ├ remove service"
@@ -248,7 +234,6 @@ _uninstall() {
     sudo rm -f /etc/systemd/system/zramit.service
   fi
   if $iswhiptail;then
-    sleep 1
     TERM=ansi whiptail --title "zramit" --infobox 'Uninstalling script and service...\n  [X] remove script\n  [X] remove hibernate script\n  [X] remove service\n  [-] remove config file' 14 58
   else
     echo "  └ remove config file"
@@ -256,15 +241,12 @@ _uninstall() {
   if [ -f /etc/default/zramit.conf ]; then
     sudo rm -f /etc/default/zramit.conf
   fi
-
   if $iswhiptail;then
-    sleep 1
     TERM=ansi whiptail --title "zramit" --infobox 'Reloading systemd unit files' 14 58
   else
     echo "Reloading systemd unit files"
   fi
   sudo systemctl daemon-reload
-
   if $iswhiptail;then
     TERM=ansi whiptail --clear --title "zramit" --msgbox 'zramit uninstalled' 14 78
   else
@@ -274,16 +256,15 @@ _uninstall() {
   fi
 }
 
+# restart function
 _restart() {
   if $iswhiptail;then
-    sleep 1
     TERM=ansi whiptail --title "zramit" --infobox 'Restarting ...' 14 58
   else
     echo "Restart zramit ..."
   fi
   sudo systemctl stop zramit.service
   sudo systemctl start zramit.service
-  sleep 1
   zramdetail=$(zramctl)
   if $iswhiptail;then
     echo "zram service restarted successfully!" >text_box
@@ -296,9 +277,9 @@ _restart() {
     echo
     echo "$zramdetail"
   fi
-
 }
 
+# congig function
 _config() {
   _rest=$1
   if ! [ -f /etc/default/zramit.conf ]; then
@@ -318,7 +299,7 @@ _config() {
     # load user config
     [ -f /etc/default/zramit.conf ] &&
       . /etc/default/zramit.conf
-    # set expected compression ratio based on algorithm; this is a rough estimate
+    # set expected compression ratio based on algorithm
     # skip if already set in user config
     sudo sh -c 'echo "# override fractional calculations and specify a fixed swap size\n# don t shoot yourself in the foot with this, or do" > /etc/default/zramit.conf'
     _temp=$(ask 'force size of real RAM used\nformat sizes like: 100M 250M 1.5G 2G etc.\ndefault unset' "_zramit_fixedsize" "$_zramit_fixedsize" |sed 's/"/\\"/g' |sed 's/\\\\/\\/g')
@@ -355,6 +336,7 @@ _config() {
   return 0
 }
 
+# status function
 _status() {
   DEVICES=$(awk '/zram/ {print $1}' /proc/swaps)
   _out='DEVICE\tALGORITHM\tDATA\tCOMPRESSION\tCOMPRESSED\tZRAM-USED\tREAD_I/Os\tWRITE_I/Os'
@@ -371,11 +353,13 @@ _status() {
   echo "$_out" |awk '{split($0,a,"#"); print a[1],a[2],a[3],a[4],a[5],a[6],a[7],a[8]}' OFS='\t' |column -t
 }
 
+# dstatus function
 _dstatus() {
   clear
   WH='\033[1;37m'
   NC='\033[0m'
   old_tty_settings=$(stty -g)
+  trap '' STOP INT QUIT TERM EXIT
   stty -icanon time 0 min 0
   tput sc
   while true;do
@@ -390,8 +374,10 @@ _dstatus() {
     tput rc
     tput ed
   done
+  trap - STOP INT QUIT TERM EXIT
 }
 
+# usage function
 _usage() {
   WH='\033[1;37m'
   NC='\033[0m'
@@ -409,6 +395,8 @@ _usage() {
   echo "    ${WH}zramit --dstatus${NC}"
  }
 
+
+# other functions
 formatbyte() {
   # formatbyte number precision
   # format a number in Byte format with precision
@@ -438,6 +426,7 @@ formatbyte() {
 }
 
 ask() {
+  # use read ou use whiptail
   [ $# -le 2 ] && res="" || res=$3
   if $iswhiptail;then
     set +e
@@ -460,6 +449,7 @@ ask() {
 }
 
 ask_choice() {
+  # print a list and use read or use whiptail whith radiolist
   list=$3
   [ $# -le 3 ] && res="lz4" || res=$4
   choix=""
@@ -480,7 +470,7 @@ ask_choice() {
   choix="$nchoix $choix"
   if $iswhiptail;then
     set +e
-    res=$(TERM=ansi whiptail --title "zramit" --radiolist "$1"'\n\n'"$2" 14 58 $choix 3>&1 1>&2 2>&3)
+    res=$(TERM=ansi whiptail --title "zramit" --radiolist "$1"'\n\n'"$2" 14 58 ${choix} 3>&1 1>&2 2>&3)
     set -e
   else
     >&2 echo "$1"

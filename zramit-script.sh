@@ -4,8 +4,6 @@
 export PATH=/usr/sbin:/usr/bin:/sbin:/bin
 \unalias -a
 
-# parse debug flag early so we can trace user configuration
-[ "$#" -gt "0" ] && [ "$1" = "-x" ] && shift && set -x
 # make sure $1 exists for 'set -u' so we can get through 'case "$1"' below
 { [ "$#" -eq "0" ] && set -- ""; } > /dev/null 2>&1
 
@@ -13,7 +11,6 @@ export PATH=/usr/sbin:/usr/bin:/sbin:/bin
 corespersocket=$(LC_ALL=C lscpu| grep "^Core(s) per socket:"|awk '{print $4}')
 sockets=$(LC_ALL=C lscpu| grep "^Socket(s):"|awk '{print $2}')
 threads=$(LC_ALL=C lscpu| grep "^CPU(s):"|awk '{print $2}')
-
 
 # set sane defaults, see /etc/default/zramit for explanations
 _zramit_fraction="1/2"
@@ -28,7 +25,7 @@ _zramit_priority="20"
 [ -f /etc/default/zramit.conf ] &&
   . /etc/default/zramit.conf
 
-# set expected compression ratio based on algorithm; this is a rough estimate
+# set expected compression ratio based on algorithm
 # skip if already set in user config
 if [ -z "$_zramit_compfactor" ]; then
   case $_zramit_algorithm in
@@ -44,7 +41,6 @@ _main() {
     err "main: Failed to load zram module, exiting"
     return 1
   fi
-
   case "$1" in
     "init" | "start")
       if grep -q zram /proc/swaps; then
@@ -82,7 +78,7 @@ _init() {
     totalmem=$(LC_ALL=C free | grep -e "^Mem:" | sed -e 's/^Mem: *//' -e 's/  *.*//')
     mem=$(echo "$totalmem*1024*$_zramit_compfactor*$_zramit_fraction/$_zramit_number" |bc)
   fi
-
+  # to be sure of minimal size
   if [ "$mem" -lt 40960 ]; then
     mem=40960
   fi
@@ -99,7 +95,6 @@ _init() {
     _limit=$(echo "$mem/$_zramit_compfactor" |bc)
     _dev=$(echo "$_device" | awk -F/ '{print $3}')
     echo "$_limit" > "/sys/block/$_dev/mem_limit"
-
     if [ -b "$_device" ]; then
       # cleanup the device if swap setup fails
       trap '_rem_zdev "$_device"' EXIT
