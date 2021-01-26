@@ -16,7 +16,5 @@ elif [ "$1" = "post" ]
   fi
   _swapfiles=$(grep -v "zram" /proc/swaps |grep "file" |awk '{print $1}' |sed -e ':a;N;$!ba;s/\n/ /g')
   # friendly clear swapfiles if exist
-  if [ -n "$_swapfile" ]; then
     echo "nice -19 swapoff -v $_swapfiles && swapon -d -v $_swapfiles" | at now + 3 minutes
-  fi
 fi

@@ -359,7 +359,7 @@ _dstatus() {
   WH='\033[1;37m'
   NC='\033[0m'
   old_tty_settings=$(stty -g)
-  trap '' STOP INT QUIT TERM EXIT
+  trap '' INT QUIT TERM EXIT
   stty -icanon time 0 min 0
   tput sc
   while true;do
@@ -374,7 +374,7 @@ _dstatus() {
     tput rc
     tput ed
   done
-  trap - STOP INT QUIT TERM EXIT
+  trap - INT QUIT TERM EXIT
 }
 
 # usage function
