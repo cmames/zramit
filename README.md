@@ -7,6 +7,7 @@
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/cmames/zramit)
 
 ![Code Grade](https://www.code-inspector.com/project/18173/score/svg)
+
 ![Code Grade](https://www.code-inspector.com/project/18173/status/svg)
 
 
