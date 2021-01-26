@@ -63,14 +63,14 @@ _main() {
 
 _install() {
   if $iswhiptail ;then
-    TERM=ansi whiptail --title "zramit" --infobox "Prepare install\n\nplease wait ..." 14 58
+    TERM=ansi whiptail --title "zramit" --infobox 'Prepare install\n\nplease wait ...' 14 58
   else echo "Prepare install"
   fi
   configdiff=''
   if systemctl -q is-active zramit.service; then
     if $iswhiptail;then
       sleep 1
-      TERM=ansi whiptail --title "zramit" --infobox "Stopping zramit service" 14 58
+      TERM=ansi whiptail --title "zramit" --infobox 'Stopping zramit service' 14 58
     else echo "Stopping zramit service"
     fi
     sudo systemctl stop zramit.service
@@ -78,7 +78,7 @@ _install() {
 
   if $iswhiptail;then
     sleep 1
-    TERM=ansi whiptail --title "zramit" --infobox "Installing script and service...\n  [-] installing script\n  [ ] installing hibernate script\n  [ ] installing service\n  [ ] installing config file" 14 58
+    TERM=ansi whiptail --title "zramit" --infobox 'Installing script and service...\n  [-] installing script\n  [ ] installing hibernate script\n  [ ] installing service\n  [ ] installing config file' 14 58
   else
       echo "Installing script and service ..."
       echo "  ├ installing script"
@@ -88,21 +88,21 @@ _install() {
 
   if $iswhiptail;then
     sleep 1
-    TERM=ansi whiptail --title "zramit" --infobox "Installing script and service...\n  [X] installing script\n  [-] installing hibernate script\n  [ ] installing service\n  [ ] installing config file" 14 58
+    TERM=ansi whiptail --title "zramit" --infobox 'Installing script and service...\n  [X] installing script\n  [-] installing hibernate script\n  [ ] installing service\n  [ ] installing config file' 14 58
   else
     echo "  ├ installing hibernate script"
   fi
   sudo install -o root zramit-hibernate.sh /lib/systemd/system-sleep/zramit-hibernate.sh
   if $iswhiptail;then
     sleep 1
-    TERM=ansi whiptail --title "zramit" --infobox "Installing script and service...\n  [X] installing script\n  [X] installing hibernate script\n  [-] installing service\n  [ ] installing config file" 14 58
+    TERM=ansi whiptail --title "zramit" --infobox 'Installing script and service...\n  [X] installing script\n  [X] installing hibernate script\n  [-] installing service\n  [ ] installing config file' 14 58
   else
     echo "  ├ installing service"
   fi
   sudo install -o root -m 0644 service/zramit.service /etc/systemd/system/zramit.service
   if $iswhiptail;then
     sleep 1
-    TERM=ansi whiptail --title "zramit" --infobox "Installing script and service...\n  [X] installing script\n  [X] installing hibernate script\n  [X] installing service\n  [-] installing config file" 14 58
+    TERM=ansi whiptail --title "zramit" --infobox 'Installing script and service...\n  [X] installing script\n  [X] installing hibernate script\n  [X] installing service\n  [-] installing config file' 14 58
   else
     echo "  └ installing config file"
   fi
@@ -121,16 +121,16 @@ _install() {
       yn=''
       if $iswhiptail;then
         sleep 1
-        if (TERM=ansi whiptail --title "zramit" --yesno "Installed configuration differs from packaged version\n\n would you want to see differences?" 14 58);then
+        if (TERM=ansi whiptail --title "zramit" --yesno 'Installed configuration differs from packaged version\n\n would you want to see differences?' 14 58);then
           echo "$configdiff">text_box
           sed -i -e "s/^</installed </g" text_box
           sed -i -e "s/^>/package >/g" text_box
           TERM=ansi whiptail --title "zramit" --scrolltext --textbox text_box 14 78
           rm text_box
         fi
-        if (TERM=ansi whiptail --title "zramit" --yesno "Installed configuration differs from packaged version\n\n install packaged config?" 14 58);then
+        if (TERM=ansi whiptail --title "zramit" --yesno 'Installed configuration differs from packaged version\n\n install packaged config?' 14 58);then
           install -o root -m 0644 --backup --suffix=".oldconfig" service/zramit.config /etc/default/zramit.conf
-          TERM=ansi whiptail --title "zramit" --msgbox "Original config backed up as /etc/default/zramit.oldconfig" 14 58
+          TERM=ansi whiptail --title "zramit" --msgbox 'Original config backed up as /etc/default/zramit.oldconfig' 14 58
         fi
       else
         echo "Installed configuration differs from packaged version."
@@ -158,7 +158,7 @@ _install() {
   else
     sudo install -o root -m 0644 -b service/zramit.config /etc/default/zramit.conf
     if $iswhiptail;then
-      if (TERM=ansi whiptail --title "zramit" --yesno "Would you want to use the config assistant?" 14 58);then
+      if (TERM=ansi whiptail --title "zramit" --yesno 'Would you want to use the config assistant?' 14 58);then
         _config norestart
       fi
     else
@@ -172,12 +172,12 @@ _install() {
   fi
   if $iswhiptail;then
     sleep 1
-    TERM=ansi whiptail --title "zramit" --infobox "Installing script and service...\n  [X] installing script\n  [X] installing hibernate script\n  [X] installing service\n  [X] installing config file" 14 58
+    TERM=ansi whiptail --title "zramit" --infobox 'Installing script and service...\n  [X] installing script\n  [X] installing hibernate script\n  [X] installing service\n  [X] installing config file' 14 58
   fi
 
   if $iswhiptail;then
     sleep 1
-    TERM=ansi whiptail --title "zramit" --infobox "Reloading systemd unit files and enabling boot-time service ..." 14 58
+    TERM=ansi whiptail --title "zramit" --infobox 'Reloading systemd unit files and enabling boot-time service ...' 14 58
   else
     echo "Reloading systemd unit files and enabling boot-time service ..."
   fi
@@ -185,7 +185,7 @@ _install() {
   sudo systemctl enable zramit.service
 
   if $iswhiptail;then
-    TERM=ansi whiptail --title "zramit" --infobox "Starting zram  service ..." 14 58
+    TERM=ansi whiptail --title "zramit" --infobox 'Starting zram  service ...' 14 58
   else
     echo "Starting zramit service ..."
   fi
@@ -208,7 +208,7 @@ _install() {
 
 _uninstall() {
   if $iswhiptail;then
-    TERM=ansi whiptail --title "zramit" --infobox "Stopping zramit service" 14 58
+    TERM=ansi whiptail --title "zramit" --infobox 'Stopping zramit service' 14 58
   else echo "Stopping zramit service"
   fi
   if systemctl -q is-active zramit.service; then
@@ -217,7 +217,7 @@ _uninstall() {
 
   if $iswhiptail;then
     sleep 1
-    TERM=ansi whiptail --title "zramit" --infobox "Uninstalling script and service...\n  [-] remove script\n  [ ] remove hibernate script\n  [ ] remove service\n  [ ] remove config file" 14 58
+    TERM=ansi whiptail --title "zramit" --infobox 'Uninstalling script and service...\n  [-] remove script\n  [ ] remove hibernate script\n  [ ] remove service\n  [ ] remove config file' 14 58
   else
       echo "Unnstalling script and service ..."
       echo "  ├ remove script"
@@ -230,7 +230,7 @@ _uninstall() {
   fi
   if $iswhiptail;then
     sleep 1
-    TERM=ansi whiptail --title "zramit" --infobox "Uninstalling script and service...\n  [X] remove script\n  [-] remove hibernate script\n  [ ] remove service\n  [ ] remove config file" 14 58
+    TERM=ansi whiptail --title "zramit" --infobox 'Uninstalling script and service...\n  [X] remove script\n  [-] remove hibernate script\n  [ ] remove service\n  [ ] remove config file' 14 58
   else
     echo "  ├ remove hibernate script"
   fi
@@ -239,7 +239,7 @@ _uninstall() {
   fi
   if $iswhiptail;then
     sleep 1
-    TERM=ansi whiptail --title "zramit" --infobox "Uninstalling script and service...\n  [X] remove script\n  [X] remove hibernate script\n  [-] remove service\n  [ ] remove config file" 14 58
+    TERM=ansi whiptail --title "zramit" --infobox 'Uninstalling script and service...\n  [X] remove script\n  [X] remove hibernate script\n  [-] remove service\n  [ ] remove config file' 14 58
   else
     echo "  ├ remove service"
   fi
@@ -249,7 +249,7 @@ _uninstall() {
   fi
   if $iswhiptail;then
     sleep 1
-    TERM=ansi whiptail --title "zramit" --infobox "Uninstalling script and service...\n  [X] remove script\n  [X] remove hibernate script\n  [X] remove service\n  [-] remove config file" 14 58
+    TERM=ansi whiptail --title "zramit" --infobox 'Uninstalling script and service...\n  [X] remove script\n  [X] remove hibernate script\n  [X] remove service\n  [-] remove config file' 14 58
   else
     echo "  └ remove config file"
   fi
@@ -259,14 +259,14 @@ _uninstall() {
 
   if $iswhiptail;then
     sleep 1
-    TERM=ansi whiptail --title "zramit" --infobox "Reloading systemd unit files" 14 58
+    TERM=ansi whiptail --title "zramit" --infobox 'Reloading systemd unit files' 14 58
   else
     echo "Reloading systemd unit files"
   fi
   sudo systemctl daemon-reload
 
   if $iswhiptail;then
-    TERM=ansi whiptail --clear --title "zramit" --msgbox "zramit uninstalled" 14 78
+    TERM=ansi whiptail --clear --title "zramit" --msgbox 'zramit uninstalled' 14 78
   else
     echo
     echo "zramit service uninstalled"
@@ -277,7 +277,7 @@ _uninstall() {
 _restart() {
   if $iswhiptail;then
     sleep 1
-    TERM=ansi whiptail --title "zramit" --infobox "Restarting ..." 14 58
+    TERM=ansi whiptail --title "zramit" --infobox 'Restarting ...' 14 58
   else
     echo "Restart zramit ..."
   fi
@@ -303,7 +303,7 @@ _config() {
   _rest=$1
   if ! [ -f /etc/default/zramit.conf ]; then
     if $iswhiptail;then
-      TERM=ansi whiptail --title "zramit" --msgbox "no config file. please install first" 14 58
+      TERM=ansi whiptail --title "zramit" --msgbox 'no config file. please install first' 14 58
     else
       echo "no config file. please install first"
     fi
@@ -321,11 +321,11 @@ _config() {
     # set expected compression ratio based on algorithm; this is a rough estimate
     # skip if already set in user config
     sudo sh -c 'echo "# override fractional calculations and specify a fixed swap size\n# don t shoot yourself in the foot with this, or do" > /etc/default/zramit.conf'
-    _temp=$(ask "force size of real RAM used\nformat sizes like: 100M 250M 1.5G 2G etc.\ndefault unset" "_zramit_fixedsize" "$_zramit_fixedsize" |sed 's/"/\\"/g' |sed 's/\\\\/\\/g')
+    _temp=$(ask 'force size of real RAM used\nformat sizes like: 100M 250M 1.5G 2G etc.\ndefault unset' "_zramit_fixedsize" "$_zramit_fixedsize" |sed 's/"/\\"/g' |sed 's/\\\\/\\/g')
     _temp="echo \"$_temp\" >> /etc/default/zramit.conf"
     sudo sh -c "$_temp"
     sudo sh -c 'echo "\n# portion of real ram to use as zram swap (expression: "1/2", "0.5", etc)" >> /etc/default/zramit.conf'
-    _temp=$(ask "portion of real ram to use as zram swap\nexpression: \"1/2\", \"0.5\", etc\ndefault 1/2" "_zramit_fraction" "$_zramit_fraction" |sed 's/"/\\"/g' |sed 's/\\\\/\\/g')
+    _temp=$(ask 'portion of real ram to use as zram swap\nexpression: "1/2", "0.5", etc\ndefault 1/2' "_zramit_fraction" "$_zramit_fraction" |sed 's/"/\\"/g' |sed 's/\\\\/\\/g')
     _temp="echo \"$_temp\" >> /etc/default/zramit.conf"
     sudo sh -c "$_temp"
     sudo sh -c 'echo "\n# compression algorithm to employ (lzo, lz4, zstd, lzo-rle)" >> /etc/default/zramit.conf'
@@ -335,20 +335,20 @@ _config() {
     sudo sh -c 'echo "\n# number of streams (threads) from compression\n#DEPRECATED\n#_zramit_streams=\"\"" >> /etc/default/zramit.conf'
 #    sudo sh -c 'echo $(ask "number of streams (threads) from compression\nleave blank for auto" "_zramit_streams" $_zramit_streams) >> /etc/default/zramit.conf'
     sudo sh -c 'echo "\n# number of swaps (1 zram swap per core , number of cores)" >> /etc/default/zramit.conf'
-    _temp=$(ask "number of swaps\ndefault is number of cores)\nleave blank for auto" "_zramit_number" "$_zramit_number" |sed 's/"/\\"/g' |sed 's/\\\\/\\/g')
+    _temp=$(ask 'number of swaps\ndefault is number of cores)\nleave blank for auto' "_zramit_number" "$_zramit_number" |sed 's/"/\\"/g' |sed 's/\\\\/\\/g')
     _temp="echo \"$_temp\" >> /etc/default/zramit.conf"
     sudo sh -c "$_temp"
     sudo sh -c 'echo "\n# priority of swaps (32767 is highest priority)\n# to manage different levels of swap" >> /etc/default/zramit.conf'
-    _temp=$(ask "priority of swaps\n32767 is highest priority\nto manage different levels of swap" "_zramit_priority" "$_zramit_priority" |sed 's/"/\\"/g' |sed 's/\\\\/\\/g')
+    _temp=$(ask 'priority of swaps\n32767 is highest priority\nto manage different levels of swap' "_zramit_priority" "$_zramit_priority" |sed 's/"/\\"/g' |sed 's/\\\\/\\/g')
     _temp="echo \"$_temp\" >> /etc/default/zramit.conf"
     sudo sh -c "$_temp"
     sudo sh -c 'echo "\n# expected compression ratio; this is a rough estimate" >> /etc/default/zramit.conf'
-    _temp=$(ask "expected compression ratio\nthis is a rough estimate\nleave blank for auto" "_zramit_compfactor" "$_zramit_compfactor" |sed 's/"/\\"/g' |sed 's/\\\\/\\/g')
+    _temp=$(ask 'expected compression ratio\nthis is a rough estimate\nleave blank for auto' "_zramit_compfactor" "$_zramit_compfactor" |sed 's/"/\\"/g' |sed 's/\\\\/\\/g')
     _temp="echo \"$_temp\" >> /etc/default/zramit.conf"
     sudo sh -c "$_temp"
     sudo sh -c 'echo "\n# Note:\n# set _zramit_compfactor by hand if you use an algorithm other than lzo/lz4/zstd or if your\n# use case produces drastically different compression results than my estimates\n#\n# defaults if otherwise unset:\n#	lzo*|zstd)  _zramit_compfactor=\"3\"   ;;\n#	lz4)        _zramit_compfactor=\"2.5\" ;;\n#	*)          _zramit_compfactor=\"2\"   ;;\n#" >> /etc/default/zramit.conf'
     if $iswhiptail;then
-      TERM=ansi whiptail --clear --title "zramit" --msgbox "zramit configuration done" 14 78
+      TERM=ansi whiptail --clear --title "zramit" --msgbox 'zramit configuration done' 14 78
     fi
     [ "$_rest" != "norestart" ] && _restart
   fi
@@ -357,7 +357,7 @@ _config() {
 
 _status() {
   DEVICES=$(awk '/zram/ {print $1}' /proc/swaps)
-  _out="DEVICE\tALGORITHM\tDATA\tCOMPRESSION\tCOMPRESSED\tZRAM-USED\tREAD_I/Os\tWRITE_I/Os"
+  _out='DEVICE\tALGORITHM\tDATA\tCOMPRESSION\tCOMPRESSED\tZRAM-USED\tREAD_I/Os\tWRITE_I/Os'
   for _device in $DEVICES; do
     _dir=/sys$(udevadm info --query=path --name="$_device")
     _unc=$(awk '{print $1}' "$_dir"/mm_stat)
@@ -365,8 +365,8 @@ _status() {
     _lim=$(awk '{print $4}' "$_dir"/mm_stat)
     _read=$(awk '{print $1}' "$_dir"/stat)
     _write=$(awk '{print $5}' "$_dir"/stat)
-    _alg=$(sed -e "s/.*\[\(.*\)\].*/\1/" "$_dir"/comp_algorithm)
-    _out="$_out\n$_device#$_alg#$(formatbyte "$_unc")#$(echo "scale=2;$_unc/$_comp" |bc)x#$(formatbyte "$_comp")#$(echo "scale=2;100*$_comp/$_lim" |bc)%#$_read#$_write"
+    _alg=$(sed -e 's/.*\[\(.*\)\].*/\1/' "$_dir"/comp_algorithm)
+    _out="$_out"'\n'"$_device#$_alg#$(formatbyte "$_unc")#$(echo "scale=2;$_unc/$_comp" |bc)x#$(formatbyte "$_comp")#$(echo "scale=2;100*$_comp/$_lim" |bc)%#$_read#$_write"
   done
   echo "$_out" |awk '{split($0,a,"#"); print a[1],a[2],a[3],a[4],a[5],a[6],a[7],a[8]}' OFS='\t' |column -t
 }
@@ -441,7 +441,7 @@ ask() {
   [ $# -le 2 ] && res="" || res=$3
   if $iswhiptail;then
     set +e
-    res=$(TERM=ansi whiptail --title "zramit" --inputbox "$1\n\n$2" 14 58 "$res" 3>&1 1>&2 2>&3)
+    res=$(TERM=ansi whiptail --title "zramit" --inputbox "$1"'\n\n'"$2" 14 58 "$res" 3>&1 1>&2 2>&3)
     set -e
   else
     >&2 echo "$1"
@@ -471,7 +471,7 @@ ask_choice() {
     nchoix=$((nchoix+1))
     elem=${list%%;*}
     list=${list#*;}
-    [ -n "$list2" ] && list2="$list2\n"
+    [ -n "$list2" ] && list2="$list2"'\n'
     list2="$list2$nchoix : $elem"
     choix="$choix $elem . "
     [ "$elem" = "$res" ] && choix="$choix ON" || choix="$choix OFF"
@@ -480,7 +480,7 @@ ask_choice() {
   choix="$nchoix $choix"
   if $iswhiptail;then
     set +e
-    res=$(TERM=ansi whiptail --title "zramit" --radiolist "$1\n\n$2" 14 58 $choix 3>&1 1>&2 2>&3)
+    res=$(TERM=ansi whiptail --title "zramit" --radiolist "$1"'\n\n'"$2" 14 58 $choix 3>&1 1>&2 2>&3)
     set -e
   else
     >&2 echo "$1"
