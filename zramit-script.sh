@@ -92,17 +92,17 @@ _init() {
   for nbz in $(seq "$_zramit_number"); do
     for i in $(seq 3); do
       sleep $((i-1))
-      echo "zramctl -f -s $mem -a $_zramit_algorithm -t $_zramit_streams"
+      echo "$nbz : zramctl -f -s $mem -a $_zramit_algorithm -t $_zramit_streams"
       _device=$(zramctl -f -s "$mem" -a "$_zramit_algorithm" -t "$_zramit_streams") || true
       [ -b "$_device" ] && break 1
     done
     _limit=$(echo "$mem/$_zramit_compfactor" |bc)
     _dev=$(echo "$_device" | awk -F/ '{print $3}')
-    echo "$_limit" > /sys/block/$_dev/mem_limit
+    echo "$_limit" > "/sys/block/$_dev/mem_limit"
 
     if [ -b "$_device" ]; then
       # cleanup the device if swap setup fails
-      trap "_rem_zdev $_device" EXIT
+      trap '_rem_zdev "$_device"' EXIT
       mkswap "$_device"
       swapon -d -p "$_zramit_priority" "$_device"
       trap - EXIT
