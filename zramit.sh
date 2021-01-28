@@ -1,9 +1,5 @@
 #!/bin/sh
 
-# ensure a predictable environment
-export PATH=/usr/sbin:/usr/bin:/sbin:/bin
-\unalias -a
-
 # check if utils are installed
 for _require in 'sed' 'grep' 'awk' 'column' 'bc' 'lscpu' 'modprobe' 'sleep' 'mkswap' 'swapon' 'swapoff' 'zramctl' 'systemctl' 'install'
 do
@@ -13,6 +9,25 @@ do
     exit 1
   }
 done
+
+# change path destination for some system which don't have /usr/local/sbin
+# and choose a path in PATH
+if [ $(echo $PATH | grep -c "/usr/local/sbin") = 1 ];then
+  _path="/usr/local/sbin"
+else
+  if [ $(echo $PATH | grep -c "/usr/sbin") = 1 ];then
+    _path="/usr/sbin"
+  else
+    if [ $(echo $PATH | grep -c "/usr/local/bin") = 1 ];then
+      _path="/usr/local/bin"
+    else _path="/usr/bin"
+    fi
+  fi
+fi
+
+# ensure a predictable environment
+export PATH=/usr/sbin:/usr/bin:/sbin:/bin
+\unalias -a
 
 # set iswhiptail if whiptail is installed
 if [ -z "$(command -v whiptail)" ];then
@@ -34,6 +49,17 @@ _main() {
       ;;
     "--install")
       # install
+      if [ ! -f zramit-script.sh ] ||
+         [ ! -f zramit-hibernate.sh ] ||
+         [ ! -f service/zramit.config ] ||
+         [ ! -f service/zramit.service ] ;then
+        WH='\033[1;37m'
+        RR='\033[1;31m'
+        NC='\033[0m'
+        echo "${RR}ERR[file not found]:${NC} You must be in the original zramit directory to run --install"
+        echo " Try ${WH}zramit --config${NC} to change configuration and restart zramit"
+        exit 1
+      fi
       sudo echo "You may be prompt for sudo"
       _install "$@"
       ;;
@@ -83,8 +109,8 @@ _install() {
       echo "Installing script and service ..."
       echo "  ├ installing script"
   fi
-  sudo install -o root zramit-script.sh /usr/local/sbin/zramit-script.sh
-  sudo install -o root zramit.sh /usr/local/sbin/zramit
+  sudo install -o root zramit-script.sh "$_path/zramit-script.sh"
+  sudo install -o root zramit.sh "$_path/zramit"
   if $iswhiptail;then
     TERM=ansi whiptail --title "zramit" --infobox 'Installing script and service...\n  [X] installing script\n  [-] installing hibernate script\n  [ ] installing service\n  [ ] installing config file' 14 58
   else
@@ -96,7 +122,10 @@ _install() {
   else
     echo "  ├ installing service"
   fi
+  # replace path in service
   sudo install -o root -m 0644 service/zramit.service /etc/systemd/system/zramit.service
+  sync
+  sudo sed -i -e "s~#PATH~$_path~g" /etc/systemd/system/zramit.service
   if $iswhiptail;then
     TERM=ansi whiptail --title "zramit" --infobox 'Installing script and service...\n  [X] installing script\n  [X] installing hibernate script\n  [X] installing service\n  [-] installing config file' 14 58
   else
@@ -210,11 +239,11 @@ _uninstall() {
       echo "Unnstalling script and service ..."
       echo "  ├ remove script"
   fi
-  if [ -f /usr/local/sbin/zramit-script.sh ]; then
-    sudo rm -f /usr/local/sbin/zramit-script.sh
+  if [ -f "$_path/zramit-script.sh" ]; then
+    sudo rm -f "$_path/zramit-script.sh"
   fi
-  if [ -f /usr/local/sbin/zramit ]; then
-    sudo rm -f /usr/local/sbin/zramit
+  if [ -f "$_path/zramit" ]; then
+    sudo rm -f "$_path/zramit"
   fi
   if $iswhiptail;then
     TERM=ansi whiptail --title "zramit" --infobox 'Uninstalling script and service...\n  [X] remove script\n  [-] remove hibernate script\n  [ ] remove service\n  [ ] remove config file' 14 58
