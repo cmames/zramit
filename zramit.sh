@@ -12,13 +12,13 @@ done
 
 # change path destination for some system which don't have /usr/local/sbin
 # and choose a path in PATH
-if [ $(echo $PATH | grep -c "/usr/local/sbin") = 1 ];then
+if [ $(echo "$PATH" | grep -c "/usr/local/sbin") = 1 ];then
   _path="/usr/local/sbin"
 else
-  if [ $(echo $PATH | grep -c "/usr/sbin") = 1 ];then
+  if [ $(echo "$PATH" | grep -c "/usr/sbin") = 1 ];then
     _path="/usr/sbin"
   else
-    if [ $(echo $PATH | grep -c "/usr/local/bin") = 1 ];then
+    if [ $(echo "$PATH" | grep -c "/usr/local/bin") = 1 ];then
       _path="/usr/local/bin"
     else _path="/usr/bin"
     fi
