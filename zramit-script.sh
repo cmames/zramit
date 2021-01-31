@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# todo sysctl -w vm.min_free_kbytes=65536 * number of cores
+
 # make sure our environment is predictable
 export PATH=/usr/sbin:/usr/bin:/sbin:/bin
 \unalias -a
@@ -7,10 +9,14 @@ export PATH=/usr/sbin:/usr/bin:/sbin:/bin
 # make sure $1 exists for 'set -u' so we can get through 'case "$1"' below
 { [ "$#" -eq "0" ] && set -- ""; } > /dev/null 2>&1
 
-# get cores and threads
+# get cores and threads and memory
 corespersocket=$(LC_ALL=C lscpu| grep "^Core(s) per socket:"|awk '{print $4}')
 sockets=$(LC_ALL=C lscpu| grep "^Socket(s):"|awk '{print $2}')
 threads=$(LC_ALL=C lscpu| grep "^CPU(s):"|awk '{print $2}')
+psize=$(cat /proc/meminfo | grep "Hugepagesize" |awk '{print $2}')
+original_min_free=$(cat /etc/default/zramit.sav | grep "original_min_free" |awk '{print $2}')
+transparent_hugepage=$(cat /etc/default/zramit.sav | grep "transparent_hugepage" |awk '{print $2}')
+min_free=$(echo "$psize * $threads + $original_min_free" |bc)
 
 # set sane defaults, see /etc/default/zramit for explanations
 _zramit_fraction="1/2"
@@ -65,7 +71,9 @@ _main() {
 
 # initialize swap
 _init() {
-
+  # set new min_free and save original_min_free
+  sysctl -w vm.min_free_kbytes="$min_free"
+  echo "never" > /sys/kernel/mm/transparent_hugepage/enabled
   if [ -n "$_zramit_fixedsize" ]; then
     if ! _regex_match "$_zramit_fixedsize" '^[[:digit:]]+(\.[[:digit:]]+)?(G|M)$'; then
       err "init: Invalid size '$_zramit_fixedsize'. Format sizes like: 100M 250M 1.5G 2G etc."
@@ -86,7 +94,7 @@ _init() {
   #       load so retry a couple of times with slightly increasing delay before giving up
   _device=''
   for nbz in $(seq "$_zramit_number"); do
-    for i in $(seq 3); do
+    for i in $(seq 5); do
       sleep $((i-1))
       echo "$nbz : zramctl -f -s $mem -a $_zramit_algorithm -t $_zramit_streams"
       _device=$(zramctl -f -s "$mem" -a "$_zramit_algorithm" -t "$_zramit_streams") || true
@@ -110,6 +118,9 @@ _init() {
 
 # end swapping and cleanup
 _end() {
+  # restore original min_free
+  sysctl -w vm.min_free_kbytes="$original_min_free"
+  echo "$transparent_hugepage" > /sys/kernel/mm/transparent_hugepage/enabled
   ret="0"
   DEVICES=$(awk '/zram/ {print $1}' /proc/swaps)
   for d in $DEVICES; do

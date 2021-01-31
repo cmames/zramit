@@ -1,19 +1,7 @@
 #!/bin/sh
 
-# search for the script and assign path
-if [ -f "/usr/local/sbin/zramit-script.sh" ];then
-  _path="/usr/local/sbin"
-else
-  if [ -f "/usr/sbin/zramit-script.sh" ];then
-    _path="/usr/sbin"
-  else
-    if [ -f "/usr/local/bin/zramit-script.sh" ];then
-      _path="/usr/local/bin"
-    else
-      _path="/usr/bin"
-    fi
-  fi
-fi
+# get install path
+_path=$(cat /etc/default/zramit.sav | grep "install_path" |awk '{print $2}')
 
 if [ "$1" = "pre" ]
  then
@@ -29,7 +17,8 @@ elif [ "$1" = "post" ]
   if [ "$2" = "hibernate" ] || [ "$2" = "hybrid-sleep" ];then
     "$_path"/zramit-script.sh init
   fi
-  _swapfiles=$(grep -v "zram" /proc/swaps |grep "file" |awk '{print $1}' |sed -e ':a;N;$!ba;s/\n/ /g')
+  # _swapfiles=$(grep -v "zram" /proc/swaps |grep "file" |awk '{print $1}' |sed -e ':a;N;$!ba;s/\n/ /g')
   # friendly clear swapfiles if exist
-    echo "nice -19 swapoff -v $_swapfiles && swapon -d -v $_swapfiles" | at now + 3 minutes
+  # just regroup a lot of read in a small time just to save other reads
+  # echo "nice -19 swapoff -v $_swapfiles && swapon -d -v $_swapfiles" | at now + 3 minutes
 fi
