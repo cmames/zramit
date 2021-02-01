@@ -37,7 +37,7 @@ else
 fi
 # get original min_free setup
 _original_min_free=$(sysctl vm.min_free_kbytes |awk '{print $3}')
-_transparent_hugepage=$(cat /sys/kernel/mm/transparent_hugepage/enabled | sed -e 's/.*\[\(.*\)\].*/\1/')
+_transparent_hugepage=$(sed -e 's/.*\[\(.*\)\].*/\1/' /sys/kernel/mm/transparent_hugepage/enabled)
 # save original parameters
 sudo sh -c "echo \"# data for zramit run and uninstall do not delete this file\" > /etc/default/zramit.sav"
 sudo sh -c "echo \"install_path $_path\" >> /etc/default/zramit.sav"
@@ -55,137 +55,7 @@ else
   iswhiptail=true
 fi
 
-# congig function
-_config() {
-  _rest=$1
-  if ! [ -f /etc/default/zramit.conf ]; then
-    if $iswhiptail;then
-      TERM=ansi whiptail --title "zramit" --msgbox 'no config file. please install first' 14 58
-    else
-      echo "no config file. please install first"
-    fi
-  else
-    _zramit_fraction="1/2"
-    _zramit_algorithm="lz4"
-    _zramit_compfactor=''
-    _zramit_fixedsize=''
-#    _zramit_streams=''
-    _zramit_number=''
-    _zramit_priority='32767'
-    # load user config
-    [ -f /etc/default/zramit.conf ] &&
-      . /etc/default/zramit.conf
-    # set expected compression ratio based on algorithm
-    # skip if already set in user config
-    sudo sh -c 'echo "# override fractional calculations and specify a fixed swap size\n# don t shoot yourself in the foot with this, or do" > /etc/default/zramit.conf'
-    _temp=$(ask 'force size of real RAM used\nformat sizes like: 100M 250M 1.5G 2G etc.\ndefault unset' "_zramit_fixedsize" "$_zramit_fixedsize" |sed 's/"/\\"/g' |sed 's/\\\\/\\/g')
-    _temp="echo \"$_temp\" >> /etc/default/zramit.conf"
-    sudo sh -c "$_temp"
-    sudo sh -c 'echo "\n# portion of real ram to use as zram swap (expression: "1/2", "0.5", etc)" >> /etc/default/zramit.conf'
-    _temp=$(ask 'portion of real ram to use as zram swap\nexpression: "1/2", "0.5", etc\ndefault 1/2' "_zramit_fraction" "$_zramit_fraction" |sed 's/"/\\"/g' |sed 's/\\\\/\\/g')
-    _temp="echo \"$_temp\" >> /etc/default/zramit.conf"
-    sudo sh -c "$_temp"
-    sudo sh -c 'echo "\n# compression algorithm to employ (lzo, lz4, zstd, lzo-rle)" >> /etc/default/zramit.conf'
-    _temp=$(ask_choice "compression algorithm to employ" "_zramit_algorithm" "lz4;lzo-rle;lzo;zstd" "$_zramit_algorithm" |sed 's/"/\\"/g' |sed 's/\\\\/\\/g')
-    _temp="echo \"$_temp\" >> /etc/default/zramit.conf"
-    sudo sh -c "$_temp"
-    sudo sh -c 'echo "\n# number of streams (threads) from compression\n#DEPRECATED\n#_zramit_streams=\"\"" >> /etc/default/zramit.conf'
-#    sudo sh -c 'echo $(ask "number of streams (threads) from compression\nleave blank for auto" "_zramit_streams" $_zramit_streams) >> /etc/default/zramit.conf'
-    sudo sh -c 'echo "\n# number of swaps (1 zram swap per core , number of cores)" >> /etc/default/zramit.conf'
-    _temp=$(ask 'number of swaps\ndefault is number of cores)\nleave blank for auto' "_zramit_number" "$_zramit_number" |sed 's/"/\\"/g' |sed 's/\\\\/\\/g')
-    _temp="echo \"$_temp\" >> /etc/default/zramit.conf"
-    sudo sh -c "$_temp"
-    sudo sh -c 'echo "\n# priority of swaps (32767 is highest priority)\n# to manage different levels of swap" >> /etc/default/zramit.conf'
-    _temp=$(ask 'priority of swaps\n32767 is highest priority\nto manage different levels of swap' "_zramit_priority" "$_zramit_priority" |sed 's/"/\\"/g' |sed 's/\\\\/\\/g')
-    _temp="echo \"$_temp\" >> /etc/default/zramit.conf"
-    sudo sh -c "$_temp"
-    sudo sh -c 'echo "\n# expected compression ratio; this is a rough estimate" >> /etc/default/zramit.conf'
-    _temp=$(ask 'expected compression ratio\nthis is a rough estimate\nleave blank for auto' "_zramit_compfactor" "$_zramit_compfactor" |sed 's/"/\\"/g' |sed 's/\\\\/\\/g')
-    _temp="echo \"$_temp\" >> /etc/default/zramit.conf"
-    sudo sh -c "$_temp"
-    sudo sh -c 'echo "\n# Note:\n# set _zramit_compfactor by hand if you use an algorithm other than lzo/lz4/zstd or if your\n# use case produces drastically different compression results than my estimates\n#\n# defaults if otherwise unset:\n#	lzo*|zstd)  _zramit_compfactor=\"3\"   ;;\n#	lz4)        _zramit_compfactor=\"2.5\" ;;\n#	*)          _zramit_compfactor=\"2\"   ;;\n#" >> /etc/default/zramit.conf'
-    if $iswhiptail;then
-      TERM=ansi whiptail --clear --title "zramit" --msgbox 'zramit configuration done' 14 78
-    fi
-    [ "$_rest" != "norestart" ] && _restart
-  fi
-  return 0
-}
-
-ask() {
-  # use read ou use whiptail
-  [ $# -le 2 ] && res="" || res=$3
-  if $iswhiptail;then
-    set +e
-    res=$(TERM=ansi whiptail --title "zramit" --inputbox "$1"'\n\n'"$2" 14 58 "$res" 3>&1 1>&2 2>&3)
-    set -e
-  else
-    >&2 echo "$1"
-    >&2 echo "$2"
-    >&2 printf "0 for auto [%s] ?" "$res"
-    read -r it
-    [ -n "$it" ] && res=$it
-  fi
-  if [ -z "$res" ] || [ "$res" = "0" ];then
-    echo "#$2=\"\""
-    echo ""
-  else
-    echo "$2=\"$res\""
-    echo ""
-  fi
-}
-
-ask_choice() {
-  # print a list and use read or use whiptail whith radiolist
-  list=$3
-  [ $# -le 3 ] && res="lz4" || res=$4
-  choix=""
-  elem="-"
-  list2=""
-  choix2=""
-  nchoix=0
-  while ! [ "$elem" = "$list" ];do
-    nchoix=$((nchoix+1))
-    elem=${list%%;*}
-    list=${list#*;}
-    [ -n "$list2" ] && list2="$list2"'\n'
-    list2="$list2$nchoix : $elem"
-    choix="$choix $elem . "
-    [ "$elem" = "$res" ] && choix="$choix ON" || choix="$choix OFF"
-    [ "$elem" = "$res" ] && choix2=$nchoix
-  done
-  choix="$nchoix $choix"
-  if $iswhiptail;then
-    set +e
-    res=$(TERM=ansi whiptail --title "zramit" --radiolist "$1"'\n\n'"$2" 14 58 ${choix} 3>&1 1>&2 2>&3)
-    set -e
-  else
-    >&2 echo "$1"
-    >&2 echo "$2"
-    >&2 echo "$list2"
-    >&2 printf "[%s] ?" "$choix2"
-    read -r it
-    if [ -n "$it" ];then
-      # transform number $it to text $res
-      list2=$(echo "$list2" | sed ':a;N;$!ba;s/\n/;/g')
-      while ! [ "$elem" = "$list2" ];do
-        elem=${list2%%;*}
-        choixn=${elem%% :*}
-        choix=${elem#*: }
-        list2=${list2#*;}
-        [ "$choixn" = "$it" ] && res=$choix
-      done
-    fi
-  fi
-  if [ -z "$res" ];then
-    echo "#$2=\"\""
-    echo ""
-  else
-    echo "$2=\"$res\""
-    echo ""
-  fi
-}
-
+. ./zramit.sh
 
 if [ ! -f zramit-script.sh ] ||
    [ ! -f zramit.sh ] ||
@@ -273,7 +143,7 @@ if [ -f /etc/default/zramit.conf ]; then
         rm text_box
       fi
       if (TERM=ansi whiptail --title "zramit" --yesno 'Installed configuration differs from packaged version\n\n install packaged config?' 14 58);then
-        install -o root -m 0644 --backup --suffix=".oldconfig" service/zramit.config /etc/default/zramit.conf
+        sudo install -o root -m 0644 --backup --suffix=".oldconfig" service/zramit.config /etc/default/zramit.conf
         TERM=ansi whiptail --title "zramit" --msgbox 'Original config backed up as /etc/default/zramit.oldconfig' 14 58
       fi
     else

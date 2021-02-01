@@ -13,9 +13,9 @@ export PATH=/usr/sbin:/usr/bin:/sbin:/bin
 corespersocket=$(LC_ALL=C lscpu| grep "^Core(s) per socket:"|awk '{print $4}')
 sockets=$(LC_ALL=C lscpu| grep "^Socket(s):"|awk '{print $2}')
 threads=$(LC_ALL=C lscpu| grep "^CPU(s):"|awk '{print $2}')
-psize=$(cat /proc/meminfo | grep "Hugepagesize" |awk '{print $2}')
-original_min_free=$(cat /etc/default/zramit.sav | grep "original_min_free" |awk '{print $2}')
-transparent_hugepage=$(cat /etc/default/zramit.sav | grep "transparent_hugepage" |awk '{print $2}')
+psize=$(grep "Hugepagesize" /proc/meminfo |awk '{print $2}')
+original_min_free=$(grep "original_min_free" /etc/default/zramit.sav |awk '{print $2}')
+transparent_hugepage=$(grep "transparent_hugepage" /etc/default/zramit.sav |awk '{print $2}')
 min_free=$(echo "$psize * $threads + $original_min_free" |bc)
 
 # set sane defaults, see /etc/default/zramit for explanations

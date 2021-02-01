@@ -1,8 +1,8 @@
 #!/bin/sh
 
 # get path
-_path=$(cat /etc/default/zramit.sav | grep "install_path" |awk '{print $2}')
-_manpath=$(cat /etc/default/zramit.sav | grep "man_path" |awk '{print $2}')
+_path=$(grep "install_path" /etc/default/zramit.sav |awk '{print $2}')
+_manpath=$(grep "man_path" /etc/default/zramit.sav |awk '{print $2}')
 
 # ensure a predictable environment
 export PATH=/usr/sbin:/usr/bin:/sbin:/bin
@@ -59,7 +59,6 @@ _main() {
       man zramit
       ;;
   esac
-  exit 0
 }
 
 # enable function
@@ -161,7 +160,7 @@ _uninstall() {
     sudo rm -f /etc/systemd/system/zramit.service
   fi
   if $iswhiptail;then
-    TERM=ansi whiptail --title "zramit" --infobox 'Uninstalling script and service...\n  [X] remove script\n  [X] remove hibernate script\n  [X] remove service\n  [-] remove man page\n  [ ] installing config file' 14 58
+    TERM=ansi whiptail --title "zramit" --infobox 'Uninstalling script and service...\n  [X] remove script\n  [X] remove hibernate script\n  [X] remove service\n  [-] remove man page\n  [ ] remove config file' 14 58
   else
     echo "  ├ remove man page"
   fi

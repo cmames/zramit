@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # get install path
-_path=$(cat /etc/default/zramit.sav | grep "install_path" |awk '{print $2}')
+_path=$(grep "install_path" /etc/default/zramit.sav |awk '{print $2}')
 
 if [ "$1" = "pre" ]
  then
