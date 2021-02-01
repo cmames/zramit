@@ -55,6 +55,7 @@ else
   iswhiptail=true
 fi
 
+#load function from zramit.#!/bin/sh
 . ./zramit.sh
 
 if [ ! -f zramit-script.sh ] ||

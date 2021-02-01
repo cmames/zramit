@@ -398,7 +398,6 @@ ask_choice() {
     >&2 printf "[%s] ?" "$choix2"
     read -r it
     if [ -n "$it" ];then
-      # transform number $it to text $res
       list2=$(echo "$list2" | sed ':a;N;$!ba;s/\n/;/g')
       while ! [ "$elem" = "$list2" ];do
         elem=${list2%%;*}

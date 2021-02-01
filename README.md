@@ -98,8 +98,10 @@ Run `zramctl` to monitor swap compression and real memory usage or run
 
 You can enable or disable zramit
 
-`zramit --enable`
+to disable zramit without uninstalling
+`zramit --disable`
 
+to enable zramit after disable
 `zramit --disable`
 
 for more details read the man pages

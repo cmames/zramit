@@ -1,7 +1,5 @@
 #!/bin/sh
 
-# todo sysctl -w vm.min_free_kbytes=65536 * number of cores
-
 # make sure our environment is predictable
 export PATH=/usr/sbin:/usr/bin:/sbin:/bin
 \unalias -a

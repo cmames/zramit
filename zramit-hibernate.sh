@@ -17,8 +17,8 @@ elif [ "$1" = "post" ]
   if [ "$2" = "hibernate" ] || [ "$2" = "hybrid-sleep" ];then
     "$_path"/zramit-script.sh init
   fi
-  # _swapfiles=$(grep -v "zram" /proc/swaps |grep "file" |awk '{print $1}' |sed -e ':a;N;$!ba;s/\n/ /g')
   # friendly clear swapfiles if exist
   # just regroup a lot of read in a small time just to save other reads
+  # _swapfiles=$(grep -v "zram" /proc/swaps |grep "file" |awk '{print $1}' |sed -e ':a;N;$!ba;s/\n/ /g')
   # echo "nice -19 swapoff -v $_swapfiles && swapon -d -v $_swapfiles" | at now + 3 minutes
 fi

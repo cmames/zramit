@@ -1,4 +1,5 @@
 .\" Manpage for zramit.
+.\"
 .TH man 8 "January 2021" "zramit 3" "zramit man page"
 .SH NAME
 zramit \- control zram swap for systemd
