@@ -3,7 +3,7 @@
 echo "You may be prompt for sudo"
 
 # check if utils are installed
-for _require in 'sed' 'grep' 'awk' 'column' 'bc' 'lscpu' 'modprobe' 'sleep' 'mkswap' 'swapon' 'swapoff' 'zramctl' 'systemctl' 'sysctl' 'install' 'manpath'
+for _require in 'sed' 'grep' 'awk' 'column' 'bc' 'lscpu' 'modprobe' 'sleep' 'mkswap' 'swapon' 'swapoff' 'zramctl' 'systemctl' 'sysctl' 'install' 'manpath' 'gzip'
 do
   [ -n "$(command -v $_require)" ]  || {
     echo "This script requires $_require"
