@@ -1,5 +1,6 @@
 [Unit]
-Description=zram swap service
+Description=zramit service
+Documentation=https://github.com/cmames/zramit
 Requires=systemd-modules-load.service
 Before=shutdown.target
 #After=

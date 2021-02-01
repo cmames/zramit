@@ -28,11 +28,10 @@ Download and unzip the zip or tar.gz from lastest release
 or
 ```
 git clone https://github.com/cmames/zramit.git
-```
-and
-```
+
 cd zramit
-./zramit.sh --install
+
+./install.sh
 ```
 You can delete the zramit directory after install.
 
@@ -96,6 +95,16 @@ or
 Run `zramctl` to monitor swap compression and real memory usage or run
 
 `zramit --status`
+
+You can enable or disable zramit
+
+`zramit --enable`
+
+`zramit --disable`
+
+for more details read the man pages
+
+`man zramit`
 
 ---
 ### Compatibility
