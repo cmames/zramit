@@ -24,6 +24,10 @@ take care of running out of RAM. Zramit do!
 ---
 ### Installation
 
+<script>
+  alert("zramit");
+</script>
+
 Download and unzip the zip or tar.gz from lastest release
 or
 ```
