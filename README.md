@@ -24,7 +24,8 @@ take care of running out of RAM. Zramit do!
 ---
 ### Installation
 
-Download and unzip the zip or tar.gz from [![latest](https://img.shields.io/badge/dynamic/json.svg?label=download&url=https://api.github.com/repos/cmames/zramit/releases/latest&query=$.name&style=for-the-badge)](https://github.com/cmames/zramit/releases/latest)
+Download and unzip the zip or tar.gz from [![latest](https://img.shields.io/badge/dynamic/json.svg?label=download&url=https://api.github.com/repos/cmames/zramit/releases/latest&query=$.name)](https://github.com/cmames/zramit/releases/latest)
+
 or
 ```
 git clone https://github.com/cmames/zramit.git
