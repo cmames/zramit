@@ -26,8 +26,8 @@ take care of running out of RAM. Zramit do!
 ---
 ### Installation
 
-download <a href="https://github.com/cmames/zramit/archive/V2.0.zip">zip</a> or 
-<a href="https://github.com/cmames/zramit/archive/V2.0.tar.gz">tar.gz</a><br>
+Download and unzip the zip or tar.gz from [latest zramit release](https://github.com/cmames/zramit/releases/latest)
+
 or
 ```
 git clone https://github.com/cmames/zramit.git
