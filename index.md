@@ -15,7 +15,7 @@
 :uk: English | :fr: Français
 ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------
 Zram swap with hibernate for linux system | Zram swap avec prise en charge de l'hibernation pour linux
-
+ | 
 --- | ---
 ### Why? | ### Pourquoi?
 
