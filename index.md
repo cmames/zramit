@@ -10,15 +10,14 @@
 ![Code Grade](https://www.code-inspector.com/project/18173/status/svg)
 
 
-English | Français
+<a href="https://github.com/cmames/zramit">https://github.com/cmames/zramit</a>
+
+:uk: English | :fr: Français
 ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------
 Zram swap with hibernate for linux system | Zram swap avec prise en charge de l'hibernation pour linux
 
-<a href="https://github.com/cmames/zramit">https://github.com/cmames/zramit</a>
-
----
-### Why?
-> ### Pourquoi?
+--- | ---
+### Why? | ### Pourquoi?
 
 There are dozens of zram swap scripts out there, but most of them are overly
 complicated and do things that haven't been neccessary since linux 3.X or have
