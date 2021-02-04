@@ -10,20 +10,22 @@
 ![Code Grade](https://www.code-inspector.com/project/18173/status/svg)
 
 
-Zram swap with hibernate for linux system 
-> Zram swap avec prise en charge de l'hibernation pour linux
+:uk: Zram swap with hibernate for linux system 
+> :fr: Zram swap avec prise en charge de l'hibernation pour linux
 
 <a href="https://github.com/cmames/zramit">https://github.com/cmames/zramit</a>
 
 ---
 ### Why? 
-> ### Pourquoi?
 
 There are dozens of zram swap scripts out there, but most of them are overly
 complicated and do things that haven't been neccessary since linux 3.X or have
 massive logic errors in their swap size calculations.
 Other zram swap scripts don't take care of hibernate or hybrid-sleep and don't
 take care of running out of RAM. Zramit do!
+
+> ### Pourquoi?
+>
 > Il existe des dizaines de scripts de swap zram, mais la plupart sont trop
 > compliqués et font des choses non pas nécessaires depuis linux 3.X ou ont
 > des erreurs logiques massives dans leurs calculs de taille de swap.
@@ -33,63 +35,92 @@ take care of running out of RAM. Zramit do!
 
 ---
 ### Installation
-> ### Installation
 
 Download and unzip the zip or tar.gz from [latest zramit release](https://github.com/cmames/zramit/releases/latest)
-> Téléchargez et décompressez le zip ou le tar.gz depuis [dernière zramit release](https://github.com/cmames/zramit/releases/latest)
 
 or
-> ou
 ```
 git clone https://github.com/cmames/zramit.git
 ```
 go in the directory created
-> placez vous dans le répertoire créé
 ```
 cd zramit
 ```
 and install
-> et installez
 ```
 ./zramit.sh --install
 ```
 You can delete the zramit directory after install.
+
+> ### Installation
+>
+> Téléchargez et décompressez le zip ou le tar.gz depuis [dernière zramit release](https://github.com/cmames/zramit/releases/latest)
+>
+> ou
+> ```
+> git clone https://github.com/cmames/zramit.git
+> ```
+> placez vous dans le répertoire créé
+> ```
+> cd zramit
+> ```
+> et installez
+> ```
+> ./zramit.sh --install
+> ```
 > Vous pouvez supprimer le répertoire après l'installation
 
 ---
 ### Configure
-> ### Configuration
 
 By editing
-> En modifiant
 ```
 /etc/default/zramit.conf
 ```
 
 Or with the configure assistant
-> Ou en utilisant l'assistant configuration
 ```
 zramit --config
 ```
+> ### Configuration
+>
+> En modifiant
+> ```
+> /etc/default/zramit.conf
+> ```
+>
+> Ou en utilisant l'assistant configuration
+> ```
+> zramit --config
+> ```
+
 ---
 ### Status
-> ### Status
 
 Display status with
-> Afficher le status avec
 ```
 zramit --status
 ```
 
 or dynamic status (auto refresh every second) with
-> ou le status dynamique (rafraichi toutes les secondes) avec
 ```
 zramit --dstatus
 ```
 
+> ### Status
+>
+> Afficher le status avec
+> ```
+> zramit --status
+> ```
+>
+> ou le status dynamique (rafraichi toutes les secondes) avec
+> ```
+> zramit --dstatus
+> ```
+
 ---
 ### Hibernate, Hybrid-sleep, Suspend
-> ### Hibernation, Veille hybride, Veille
 
 Zramit assure end of zram swap before entering hibernate, and assure start at
 resume from hibernate.
@@ -97,6 +128,9 @@ resume from hibernate.
 Hybrid-sleep is like hibernate to take care in case of power failure.
 
 On suspend, zramit do nothing.
+
+> ### Hibernation, Veille hybride, Veille
+> 
 > Zramit s'assure d'arréter le swap en zram avant d'entrer en hibernation, et
 > s'assure de le relancer au retour de l'hibernation.
 >
@@ -167,9 +201,11 @@ For more details read the man pages
 
 ---
 ### Compatibility
-> ### Compatibilité
 
 This should run on pretty much any recent (4.0+? kernel) Linux system using
 systemd.
+
+> ### Compatibilité
+>
 > Il doit tourner sur les plus récents (4.0+? kernel) systèmes linux utilisant
 > systemd
