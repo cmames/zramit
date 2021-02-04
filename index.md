@@ -141,63 +141,83 @@ On suspend, zramit do nothing.
 
 ---
 ### Usage
-> ### Utilisation
 
 Zramit.service will be started automatically after installation and during
 each subsequent boot. The default allocation creates a zram device that should
 use around half of physical memory when completely full.
-> Zramit.service sera lancé automatiquement après l'installation et à chaque
-> démarrage ultérieur. L'installation par défaut crée un périphérique zram qui 
-> doit utiliser environ la moitié de la mémoire physique lorsqu'elle est 
-> complètement pleine.
 
 The default configuration using lz4 should work well for most people. lzo may
 provide slightly better RAM utilization at a cost of slightly more expensive
 decompression. zstd should provide better compression than lz* and still be
 moderately fast on most machines but slow on old machines. On very modern
 kernels the best overall choice is probably lzo-rle.
+
+Edit `/etc/default/zramit.conf` if you'd like to change compression algorithms
+or swap allocation and then restart zramit with
+
+`systemctl restart zramit.service`
+
+or
+
+`zramit --restart`
+
+Run `zramctl` during use to monitor swap compression and real memory usage
+or run `zramit --status`
+
+You can enable or disable zramit
+
+to disable zramit without uninstalling
+
+`zramit --disable`
+
+to enable zramit after disable
+
+`zramit --enable`
+
+For more details read the man pages
+
+`man zramit`
+
+> ### Utilisation
+>
+> Zramit.service sera lancé automatiquement après l'installation et à chaque
+> démarrage ultérieur. L'installation par défaut crée un périphérique zram qui 
+> doit utiliser environ la moitié de la mémoire physique lorsqu'elle est 
+> complètement pleine.
+>
 > La configuration par défaut utilisant lz4 devrait bien fonctionner pour la 
 > plupart des gens. lzo peut fournir une utilisation légèrement meilleure de la 
 > RAM avec un temps légèrement plus important de décompression. zstd devrait 
 > fournir une meilleure compression que lz* tout en restant modérément rapide 
 > sur la plupart des machines mais lent sur les anciennes machines. Sur un noyaux
 > très moderne, le meilleur choix global est probablement lzo-rle.
-
-Edit `/etc/default/zramit.conf` if you'd like to change compression algorithms
-or swap allocation and then restart zramit with
+>
 > Editez `/etc/default/zramit.conf` si vous voulez changer l'algorithme de 
 > compression ou l'allocation mémoire puis relancez zramit avec
-
-`systemctl restart zramit.service`
-
-or
+> 
+> `systemctl restart zramit.service`
+>
 > ou
-
-`zramit --restart`
-
-Run `zramctl` during use to monitor swap compression and real memory usage
-or run `zramit --status`
+>
+> `zramit --restart`
+>
 > Lancez `zramctl` pendant le fonctionnement pour surveiller la compression du swap
 > et l'utilisation de la mémoire ou lancez `zramit --status`
-
-You can enable or disable zramit
-
-to disable zramit without uninstalling
+>
 > Vous pouvez activer ou désactiver zramit
 >
 > pour désactiver zramit sans désinstaller
-
-`zramit --disable`
-
-to enable zramit after disable
+>
+> `zramit --disable`
+>
 > pour activer zramit après une désactivation
-
-`zramit --enable`
-
-For more details read the man pages
+>
+> `zramit --enable`
+>
 > Pour plus de détail lisez le manuel
-
-`man zramit`
+> 
+> `man zramit`
+>
 
 ---
 ### Compatibility
