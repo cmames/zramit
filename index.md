@@ -10,8 +10,9 @@
 ![Code Grade](https://www.code-inspector.com/project/18173/status/svg)
 
 
-Zram swap with hibernate for linux system
-> Zram swap avec prise en charge de l'hibernation pour linux
+English | Français
+------------------------------------------------------------------------------- | -------------------------------------------------------------------------------
+Zram swap with hibernate for linux system | Zram swap avec prise en charge de l'hibernation pour linux
 
 <a href="https://github.com/cmames/zramit">https://github.com/cmames/zramit</a>
 
