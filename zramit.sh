@@ -276,8 +276,10 @@ _config() {
 
 # status function
 _status() {
+  WH='\033[1;37m'
+  NC='\033[0m'
   DEVICES=$(awk '/zram/ {print $1}' /proc/swaps)
-  _out='DEVICE\tALGORITHM\tDATA\tCOMPRESSION\tCOMPRESSED\tZRAM-USED\tREAD_I/Os\tWRITE_I/Os'
+  _out="${WH}"'DEVICE\tALGORITHM\tDATA\tCOMPRESSION\tCOMPRESSED\tZRAM-USED\tREAD_I/Os\tWRITE_I/Os'"${NC}"
   _tunc=0
   _tcomp=0
   _tlim=0
@@ -298,7 +300,7 @@ _status() {
     _tread=$(echo "$_tread+$_read" |bc)
     _twrite=$(echo "$_twrite+$_write" |bc)
   done
-  _out="$_out"'\n'"TOTAL#---#$(formatbyte "$_tunc")#$(echo "scale=2;$_tunc/$_tcomp" |bc)x#$(formatbyte "$_tcomp")#$(echo "scale=2;100*$_tcomp/$_tlim" |bc)%#$_tread#$_twrite"
+  _out="$_out"'\n'"${WH}TOTAL#---#$(formatbyte "$_tunc")#$(echo "scale=2;$_tunc/$_tcomp" |bc)x#$(formatbyte "$_tcomp")#$(echo "scale=2;100*$_tcomp/$_tlim" |bc)%#$_tread#$_twrite${NC}"
   echo "$_out" |awk '{split($0,a,"#"); print a[1],a[2],a[3],a[4],a[5],a[6],a[7],a[8]}' OFS='\t' |column -t
 }
 
