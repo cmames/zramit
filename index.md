@@ -28,7 +28,7 @@ take care of running out of RAM. Zramit do!
 > compliqués et font des choses non pas nécessaires depuis linux 3.X ou ont
 > des erreurs logiques massives dans leurs calculs de taille de swap.
 > Les autres scripts de swap zram ne prennent pas en charge l'hibernation ou
-> l'hibernation hybride et ne veillent pas à protéger de la pénurie de RAM.
+> la veille hybride et ne veillent pas à protéger de la pénurie de RAM.
 > Zramit le fais!
 
 ---
@@ -89,7 +89,7 @@ zramit --dstatus
 
 ---
 ### Hibernate, Hybrid-sleep, Suspend
-> ### Hibernation, Hibernation hybride, Veille
+> ### Hibernation, Veille hybride, Veille
 
 Zramit assure end of zram swap before entering hibernate, and assure start at
 resume from hibernate.
@@ -100,10 +100,10 @@ On suspend, zramit do nothing.
 > Zramit s'assure d'arréter le swap en zram avant d'entrer en hibernation, et
 > s'assure de le relancer au retour de l'hibernation.
 >
-> L'hibernation hybride est comme l'hibernation pour assurer le bon fonctionnement
+> La veille hybride est comme l'hibernation pour assurer le bon fonctionnement
 > en cas de coupure d'alimentation.
 >
-> Dans la cas de la veille, zramit n'a rien besoin de faire de plus.
+> Dans la cas de la veille simple, zramit n'a rien besoin de faire de plus.
 
 ---
 ### Usage
