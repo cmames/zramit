@@ -276,8 +276,15 @@ _config() {
 
 # status function
 _status() {
+  WH='\033[1;37m'
+  NC='\033[0m'
   DEVICES=$(awk '/zram/ {print $1}' /proc/swaps)
-  _out='DEVICE\tALGORITHM\tDATA\tCOMPRESSION\tCOMPRESSED\tZRAM-USED\tREAD_I/Os\tWRITE_I/Os'
+  _out="${WH}"'DEVICE\tALGORITHM\tDATA\tCOMPRESSION\tCOMPRESSED\tZRAM-USED\tREAD_I/Os\tWRITE_I/Os'"${NC}"
+  _tunc=0
+  _tcomp=0
+  _tlim=0
+  _tread=0
+  _twrite=0
   for _device in $DEVICES; do
     _dir=/sys$(udevadm info --query=path --name="$_device")
     _unc=$(awk '{print $1}' "$_dir"/mm_stat)
@@ -287,7 +294,13 @@ _status() {
     _write=$(awk '{print $5}' "$_dir"/stat)
     _alg=$(sed -e 's/.*\[\(.*\)\].*/\1/' "$_dir"/comp_algorithm)
     _out="$_out"'\n'"$_device#$_alg#$(formatbyte "$_unc")#$(echo "scale=2;$_unc/$_comp" |bc)x#$(formatbyte "$_comp")#$(echo "scale=2;100*$_comp/$_lim" |bc)%#$_read#$_write"
+    _tunc=$(echo "$_tunc+$_unc" |bc)
+    _tcomp=$(echo "$_tcomp+$_comp" |bc)
+    _tlim=$(echo "$_tlim+$_lim" |bc)
+    _tread=$(echo "$_tread+$_read" |bc)
+    _twrite=$(echo "$_twrite+$_write" |bc)
   done
+  _out="$_out"'\n'"${WH}TOTAL#---#$(formatbyte "$_tunc")#$(echo "scale=2;$_tunc/$_tcomp" |bc)x#$(formatbyte "$_tcomp")#$(echo "scale=2;100*$_tcomp/$_tlim" |bc)%#$_tread#$_twrite${NC}"
   echo "$_out" |awk '{split($0,a,"#"); print a[1],a[2],a[3],a[4],a[5],a[6],a[7],a[8]}' OFS='\t' |column -t
 }
 

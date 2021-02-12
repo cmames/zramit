@@ -201,8 +201,8 @@ For more details read the man pages
 >
 > `zramit --restart`
 >
-> Lancez `zramctl` pendant le fonctionnement pour surveiller la compression du swap
-> et l'utilisation de la mémoire ou lancez `zramit --status`
+> Lancez `zramctl` pendant le fonctionnement pour surveiller la compression du 
+> swap et l'utilisation de la mémoire ou lancez `zramit --status`
 >
 > Vous pouvez activer ou désactiver zramit
 >
