@@ -17,7 +17,7 @@ fi
 
 # main body:
 _main() {
-  # ensure $1 exists so 'set -u' doesn't error out
+  # ensure $1 exists
   { [ "$#" -eq "0" ] && set -- ""; } > /dev/null 2>&1
 
   case "$1" in
