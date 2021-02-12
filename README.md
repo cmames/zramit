@@ -189,7 +189,7 @@ For more details read the man pages
 > plupart des gens. lzo peut fournir une utilisation légèrement meilleure de la 
 > RAM avec un temps légèrement plus important de décompression. zstd devrait 
 > fournir une meilleure compression que lz* tout en restant modérément rapide 
-> sur la plupart des machines mais lent sur les anciennes machines. Sur un noyaux
+> sur la plupart des machines mais lent sur les anciennes machines. Sur un noyau
 > très moderne, le meilleur choix global est probablement lzo-rle.
 >
 > Editez `/etc/default/zramit.conf` si vous voulez changer l'algorithme de 
@@ -227,5 +227,5 @@ systemd.
 
 > ### Compatibilité
 >
-> Il doit tourner sur les plus récents (4.0+? kernel) systèmes linux utilisant
+> Il doit tourner sur les plus récents (kernel 4.0+?) systèmes linux utilisant
 > systemd
