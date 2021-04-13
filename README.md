@@ -48,7 +48,7 @@ cd zramit
 ```
 and install
 ```
-./zramit.sh --install
+./install.sh
 ```
 You can delete the zramit directory after install.
 
@@ -66,7 +66,7 @@ You can delete the zramit directory after install.
 > ```
 > et installez
 > ```
-> ./zramit.sh --install
+> ./install.sh
 > ```
 > Vous pouvez supprimer le répertoire après l'installation
 
