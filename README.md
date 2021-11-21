@@ -1,4 +1,7 @@
 # zramit
+
+![Customized Card](https://github-readme-stats.vercel.app/api/pin?username=cmames&repo=zramit&theme=aura)
+
 [![GitHub license](https://img.shields.io/github/license/cmames/zramit)](https://github.com/cmames/zramit/blob/main/LICENSE)
 ![GitHub last commit](https://img.shields.io/github/last-commit/cmames/zramit)
 
