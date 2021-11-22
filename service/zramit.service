@@ -1,4 +1,7 @@
+# zramit by C. Mames is licensed under the GNU General Public License v3.0
+# https://github.com/cmames/zramit
 # zramit service
+
 [Unit]
 Description=zramit service
 Documentation=https://github.com/cmames/zramit
