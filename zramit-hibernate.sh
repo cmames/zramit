@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# zramit by C. Mames is licensed under the GNU General Public License v3.0
+# https://github.com/cmames/zramit
+
 # get install path
 _path=$(grep "install_path" /etc/default/zramit.sav |awk '{print $2}')
 
