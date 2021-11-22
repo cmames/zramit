@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# zramit by C. Mames is licensed under the GNU General Public License v3.0
+# https://github.com/cmames/zramit
+
 echo "You may be prompt for sudo"
 
 # check if utils are installed
